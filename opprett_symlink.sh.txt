@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Definer modifikasjonene som skal brukes
+MOD_DIR="/home/dayz/server"
+
+# Naviger gjennom hver mod i mods.txt
+while IFS= read -r MOD; do
+    MOD_PATH="$MOD_DIR/@workshop/$MOD"
+    
+    # Sjekk etter forskjellige varianter av "keys"-mappen
+    if [ -d "$MOD_PATH/keys" ]; then
+        KEYS_DIR="$MOD_PATH/keys"
+    elif [ -d "$MOD_PATH/Keys" ]; then
+        KEYS_DIR="$MOD_PATH/Keys"
+    elif [ -d "$MOD_PATH/KEYS" ]; then
+        KEYS_DIR="$MOD_PATH/KEYS"
+    else
+        echo "Ingen 'keys'-mappe funnet for mod: $MOD"
+        continue
+    fi
+
+    # Opprett systemiske lenker for .bikey-filer
+    for keyfile in "$KEYS_DIR"/*.bikey; do
+        ln -s "$keyfile" "$MOD_DIR/keys/$(basename $keyfile)"
+    done
+done < mods.txt

@@ -1,0 +1,36 @@
+# Bruk en Ubuntu base image
+FROM ubuntu:20.04
+
+# Installere nødvendige pakker
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    lib32gcc1 \
+    lib32stdc++6 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Opprette kataloger
+RUN mkdir -p /home/dayz/steamcmd /home/dayz/server
+
+# Kopiere SteamCMD installasjonsfiler
+COPY steamcmd.zip /home/dayz/steamcmd/
+
+# Installere SteamCMD
+RUN cd /home/dayz/steamcmd && \
+    unzip steamcmd.zip && \
+    chmod +x steamcmd.sh && \
+    ./steamcmd.sh +login anonymous +force_install_dir /home/dayz/server +app_update 223350 validate +quit
+
+# Definere arbeidskatalog
+WORKDIR /home/dayz/server
+
+# Kopiere script for å laste ned mods og starte serveren
+COPY download_mods.sh /home/dayz/server/
+COPY start_server.sh /home/dayz/server/
+COPY opprett_symlink.sh /home/dayz/server/
+
+# Gjøre skriptene kjørbare
+RUN chmod +x /home/dayz/server/download_mods.sh /home/dayz/server/start_server.sh /home/dayz/server/opprett_symlink.sh
+
+# Definere kommando for å kjøre startskriptet
+CMD ["./start_server.sh"]

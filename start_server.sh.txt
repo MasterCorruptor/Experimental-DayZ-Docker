@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Last ned mods
+./download_mods.sh
+
+# Opprett systemiske lenker for .bikey-filer
+./opprett_symlink.sh
+
+# Sett opp modifikasjonene som skal brukes
+MOD_LIST=""
+while IFS= read -r MOD; do
+    MOD_LIST+="@workshop/$MOD;"
+done < mods.txt
+
+# Fjern siste semikolon
+MOD_LIST=${MOD_LIST%?}
+
+# Start serveren med mods
+./DayZServer_x64 -config=serverDZ.cfg -mod=$MOD_LIST -port=2302 -profiles=./profiles -dologs -adminlog -netlog -freezecheck
