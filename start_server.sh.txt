@@ -3,7 +3,7 @@
 # Last ned mods
 ./download_mods.sh
 
-# Opprett systemiske lenker for .bikey-filer
+# Opprett systemiske lenker for mods og .bikey-filer
 ./opprett_symlink.sh
 
 # Sett opp modifikasjonene som skal brukes
