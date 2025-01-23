@@ -9,7 +9,10 @@
 # Sett opp modifikasjonene som skal brukes
 MOD_LIST=""
 while IFS= read -r MOD; do
-    MOD_LIST+="@workshop/$MOD;"
+    # Ignorerer tomme linjer og linjer som begynner med #
+    if [[ ! "$MOD" =~ ^#.*$ ]] && [[ ! -z "$MOD" ]]; then
+        MOD_LIST+="@workshop/$MOD;"
+    fi
 done < mods.txt
 
 # Fjern siste semikolon
