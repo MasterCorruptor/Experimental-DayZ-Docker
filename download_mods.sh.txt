@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Definer SteamCMD-katalog og serverkatalog
-STEAMCMD_DIR="/home/dayz/steamcmd"
-SERVER_DIR="/home/dayz/server"
+STEAMCMD_DIR="/home/kjetil/dayz_docker/steamcmd"
+SERVER_DIR="/home/kjetil/dayz_docker/server"
 
 # Logg inn i SteamCMD og last ned mods
 while IFS= read -r MOD; do
