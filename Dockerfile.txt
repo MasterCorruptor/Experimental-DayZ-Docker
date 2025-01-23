@@ -9,28 +9,28 @@ RUN apt-get update && apt-get install -y \
     lib32stdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
-# Opprette kataloger
-RUN mkdir -p /home/dayz/steamcmd /home/dayz/server
-
-# Kopiere SteamCMD installasjonsfiler
-COPY steamcmd.zip /home/dayz/steamcmd/
+# Opprette kataloger og flytte SteamCMD zip-fil
+RUN mkdir -p /home/kjetil/dayz_docker/steamcmd /home/kjetil/dayz_docker/server /home/kjetil/dayz_docker/steamapps/workshop/content/221100
+COPY steamcmd.zip /home/kjetil/dayz_docker/steamcmd/steamcmd.zip
 
 # Installere SteamCMD
-RUN cd /home/dayz/steamcmd && \
+RUN cd /home/kjetil/dayz_docker/steamcmd && \
     unzip steamcmd.zip && \
     chmod +x steamcmd.sh && \
-    ./steamcmd.sh +login anonymous +force_install_dir /home/dayz/server +app_update 223350 validate +quit
+    ./steamcmd.sh +login anonymous +force_install_dir /home/kjetil/dayz_docker/server +app_update 223350 validate +quit
 
 # Definere arbeidskatalog
-WORKDIR /home/dayz/server
+WORKDIR /home/kjetil/dayz_docker/server
 
-# Kopiere script for å laste ned mods og starte serveren
-COPY download_mods.sh /home/dayz/server/
-COPY start_server.sh /home/dayz/server/
-COPY opprett_symlink.sh /home/dayz/server/
+# Kopiere skript for å laste ned mods og starte serveren
+COPY download_mods.sh /home/kjetil/dayz_docker/server/
+COPY start_server.sh /home/kjetil/dayz_docker/server/
+COPY opprett_symlink.sh /home/kjetil/dayz_docker/server/
+COPY serverDZ.cfg /home/kjetil/dayz_docker/server/
+COPY mods.txt /home/kjetil/dayz_docker/server/
 
 # Gjøre skriptene kjørbare
-RUN chmod +x /home/dayz/server/download_mods.sh /home/dayz/server/start_server.sh /home/dayz/server/opprett_symlink.sh
+RUN chmod +x /home/kjetil/dayz_docker/server/download_mods.sh /home/kjetil/dayz_docker/server/start_server.sh /home/kjetil/dayz_docker/server/opprett_symlink.sh
 
 # Definere kommando for å kjøre startskriptet
 CMD ["./start_server.sh"]
