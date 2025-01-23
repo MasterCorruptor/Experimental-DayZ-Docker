@@ -6,5 +6,8 @@ SERVER_DIR="/home/dayz/server"
 
 # Logg inn i SteamCMD og last ned mods
 while IFS= read -r MOD; do
-    $STEAMCMD_DIR/steamcmd.sh +login anonymous +workshop_download_item 221100 $MOD +quit
+    # Ignorerer tomme linjer og linjer som begynner med #
+    if [[ ! "$MOD" =~ ^#.*$ ]] && [[ ! -z "$MOD" ]]; then
+        $STEAMCMD_DIR/steamcmd.sh +login anonymous +workshop_download_item 221100 $MOD +quit
+    fi
 done < mods.txt
