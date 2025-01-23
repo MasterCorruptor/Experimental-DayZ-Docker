@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Definer modifikasjonene som skal brukes
-MOD_DIR="/home/dayz/server"
+MOD_DIR="/home/kjetil/dayz_docker/server"
 
 # Naviger gjennom hver mod i mods.txt
 while IFS= read -r MOD; do
