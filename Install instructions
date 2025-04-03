@@ -62,6 +62,13 @@ This guide will help you set up and run the Experimental DayZ Docker project. Fo
 ### Notes
 
 - **Ports**: Make sure the ports `2302` and `27016` are available and properly mapped.
+
+#### Note on Port Configuration
+If the server inside the container needs to use port 2302 or 27016, but the host machine has different ports available, you can map the host's ports to the container's ports. This way, any traffic directed to the host machine ports will be forwarded to the respective ports within the Docker container. For example:
+```sh
+docker run -it --name dayz-server -p hostPort1:2302/udp -p hostPort2:27016/udp dayz-server /bin/bash
+```
+
 - **Volume Mounts**: If you need persistent storage, consider using Docker volumes.
 - **Scripts**:
   - `download_mods.sh`: Script to download mods.
