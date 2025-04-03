@@ -1,0 +1,71 @@
+# Experimental DayZ Docker Installation Guide
+
+This guide will help you set up and run the Experimental DayZ Docker project. Follow the steps below to build and run the Docker container for the DayZ server.
+
+## Prerequisites
+
+- Docker installed on your machine.
+- Docker Compose installed (if using a docker-compose.yml file).
+
+## Steps
+
+1. **Clone the Repository**
+   ```sh
+   git clone https://github.com/MasterCorruptor/Experimental-DayZ-Docker.git
+   cd Experimental-DayZ-Docker
+   ```
+
+2. **Build the Docker Image**
+   Run the following command to build the Docker image:
+   ```sh
+   docker build -t dayz-server .
+   ```
+
+3. **Run the Docker Container with Interactive Shell**
+   Start the Docker container with an interactive shell to manually log in to SteamCMD:
+   ```sh
+   docker run -it --name dayz-server -p 2302:2302/udp -p 27016:27016/udp dayz-server /bin/bash
+   ```
+
+4. **Manually Log in to SteamCMD**
+   Inside the running container, manually log in to SteamCMD to generate the authentication token:
+   ```sh
+   cd /home/kjetil/dayz_docker/steamcmd
+   ./steamcmd.sh +login <your_steam_username>
+   ```
+   Follow the prompts to complete the login process.
+
+5. **Run SteamCMD to Download Game Files**
+   After logging in, run the SteamCMD command to download the necessary game files:
+   ```sh
+   ./steamcmd.sh +login anonymous +force_install_dir /home/kjetil/dayz_docker/server +app_update 223350 validate +quit
+   ```
+
+6. **Exit the Container**
+   Once the game files are downloaded, exit the container:
+   ```sh
+   exit
+   ```
+
+7. **Commit the Container State**
+   Commit the current state of the container to create a new image with the downloaded game files:
+   ```sh
+   docker commit dayz-server dayz-server:latest
+   ```
+
+8. **Run the Container in Detached Mode**
+   Start the container in detached mode to run the DayZ server:
+   ```sh
+   docker run -d --name dayz-server -p 2302:2302/udp -p 27016:27016/udp dayz-server
+   ```
+
+### Notes
+
+- **Ports**: Make sure the ports `2302` and `27016` are available and properly mapped.
+- **Volume Mounts**: If you need persistent storage, consider using Docker volumes.
+- **Scripts**:
+  - `download_mods.sh`: Script to download mods.
+  - `start_server.sh`: Script to start the server.
+  - `opprett_symlink.sh`: Script to create symlinks for mods and `.bikey` files.
+
+By following these steps, you should be able to successfully build and run the DayZ server using Docker. If you encounter any issues, please refer to the project documentation or seek help from the community.
